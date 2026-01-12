@@ -1,0 +1,1 @@
+Xây dựng Android app theo kiến trúc MVVM, sử dụng Jetpack Compose cho UI, Retrofit gọi REST API, Room lưu dữ liệu offline, Hilt cho dependency injection.
