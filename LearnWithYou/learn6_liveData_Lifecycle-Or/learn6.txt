@@ -1,0 +1,183 @@
+🎯 Mục tiêu Bài 6 (nói thẳng, dễ nhớ)
+
+Sau bài này bạn sẽ hiểu tận gốc:
+
+Vì sao xoay màn hình không mất data
+
+Vì sao observe() tự chạy lại
+
+value vs postValue khác nhau thế nào
+
+LiveData tự xử lý lifecycle ra sao (không leak, không crash)
+
+🧠 Tư duy trước khi code (rất quan trọng)
+
+👉 Có 2 thứ KHÁC NHAU:
+
+ViewModel sống lâu (qua rotation)
+
+Activity chết & tạo lại
+
+LiveData chính là cây cầu nối an toàn giữa 2 thứ này.
+
+🧩 Sơ đồ tổng quan Bài 6
+1️⃣ Test thực tế: Xoay màn hình có chuyện gì xảy ra?
+Code hiện tại (không đổi)
+ViewModel
+private val _message = MutableLiveData<String>()
+val message: LiveData<String> = _message
+
+fun greet(name: String) {
+    _message.value = "Hello $name"
+}
+
+Activity
+viewModel.message.observe(this) { message ->
+    binding.tvResult.text = message
+}
+
+🧪 Kịch bản test
+
+Mở app
+
+Nhập: Nam
+
+Nhấn Greet → hiện "Hello Nam"
+
+Xoay màn hình
+
+👉 ❓ Câu hỏi:
+Vì sao text VẪN còn?
+
+2️⃣ Chuyện gì xảy ra khi xoay màn hình? (bóc từng bước)
+🔴 Activity
+
+onDestroy()
+
+object Activity chết thật
+
+🟢 ViewModel
+
+KHÔNG bị destroy
+
+vẫn nằm trong ViewModelStore
+
+👉 Đây là lý do state không mất
+
+3️⃣ Vậy vì sao UI hiện lại text dù Activity mới?
+Giai đoạn 1 – Activity mới được tạo
+viewModel.message.observe(this) { message ->
+    binding.tvResult.text = message
+}
+
+
+👉 Observer đăng ký lại
+
+Giai đoạn 2 – LiveData phản ứng
+
+📌 QUY TẮC VÀNG của LiveData:
+
+Khi observer mới đăng ký,
+nếu LiveData đã có value,
+→ gửi value NGAY LẬP TỨC
+
+👉 LiveData thấy:
+
+value = "Hello Nam"
+
+lifecycle = ACTIVE
+
+➡️ Gọi observe callback ngay
+
+4️⃣ Chốt não Bài 6 – câu cực quan trọng
+
+❗ observe() không chỉ chạy khi value thay đổi
+❗ mà còn chạy khi observer mới xuất hiện
+
+Đây là lý do:
+
+xoay màn hình
+
+back / resume
+
+quay lại app
+
+👉 UI luôn sync đúng state
+
+5️⃣ Lifecycle – LiveData tự bảo vệ bạn thế nào?
+viewModel.message.observe(this) { ... }
+
+
+this = LifecycleOwner
+
+LiveData chỉ gọi observer khi Activity ở trạng thái:
+
+✅ STARTED
+
+✅ RESUMED
+
+❌ KHÔNG gọi khi:
+
+STOPPED
+
+DESTROYED
+
+👉 Không crash
+👉 Không memory leak
+👉 Không cần remove observer thủ công
+
+6️⃣ value vs postValue (rất hay bị hỏi)
+value
+_message.value = "Hello"
+
+
+Chạy MAIN THREAD
+
+Dùng trong:
+
+click
+
+logic UI
+
+postValue
+_message.postValue("Hello")
+
+
+Dùng khi BACKGROUND THREAD
+
+Ví dụ:
+
+network
+
+coroutine Dispatchers.IO
+
+📌 Nếu gọi value ở background → CRASH
+
+7️⃣ Tóm tắt LUỒNG BÀI 6 (1 phút nhớ)
+User click
+→ ViewModel đổi state
+→ LiveData giữ value
+→ Activity chết (rotation)
+→ Activity mới observe
+→ LiveData gửi lại value
+→ UI restore
+
+🧠 5 CÂU GHI NHỚ (rất đáng giá)
+
+ViewModel không chết khi xoay
+
+LiveData giữ state
+
+Observer mới → nhận value cũ
+
+LiveData chỉ gọi khi lifecycle ACTIVE
+
+value = main thread, postValue = background
+
+❗ LỖI TƯ DUY HAY GẶP (bạn tránh được là hơn người)
+
+❌ “LiveData chỉ chạy khi value đổi”
+✅ Sai – observer mới cũng được gọi
+
+❌ “Activity giữ data”
+✅ Sai – ViewModel giữ data

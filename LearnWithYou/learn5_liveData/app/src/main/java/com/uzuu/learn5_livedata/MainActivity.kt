@@ -10,21 +10,22 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
 
+        //set ui
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 1️⃣ Observe state
+        //observe state
         viewModel.message.observe(this) { message ->
             binding.tvResult.text = message
         }
 
-        // 2️⃣ Gửi event
+        //gửi event cho viewmodel
         binding.btnGreet.setOnClickListener {
-            val name = binding.edtName.text.toString()
-            viewModel.greet(name)
+            var name = binding.edtName.text.toString()
+            viewModel.Greet(name)
         }
     }
 }

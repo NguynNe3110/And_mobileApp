@@ -5,14 +5,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class MainViewModel : ViewModel() {
-
+//logic
     private val logic = MainLogic()
-
-    // STATE (bên ngoài chỉ đọc)
+//state
     private val _message = MutableLiveData<String>()
-    val message: LiveData<String> = _message
+    val message : LiveData<String> = _message
 
-    fun greet(name: String) {
+    // handle
+    fun Greet(name: String){
         _message.value = logic.getGreeting(name)
     }
 }
+
