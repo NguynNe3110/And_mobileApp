@@ -5,6 +5,7 @@ Room lưu dữ liệu offline, Hilt cho dependency injection.
 # -- Created by NguyenUzuu --
 
 ⭐Began : 10/1/2026 - Finish : 10/4/2026 (KPI)
+<!--
 ## Excercise😶‍🌫️
 -----Thư mục nghịch linh tinh có thể chứa Project Android_Studio || Nicotin Kotlin
 🍀🍀🍀
@@ -15,7 +16,8 @@ Room lưu dữ liệu offline, Hilt cho dependency injection.
 
 ## NguyenUzuuProject😶‍🌫️
 -----Mọi thứ đã đạt được trong phiên Practice lần này
-🍀🍀🍀
+🍀🍀🍀 
+<!-------------------------------------------------------------------------------->
 
 # Dự án cá nhân
 ## Todo / Notes App (Offline – Local)
@@ -48,4 +50,5 @@ Kiến thức:
 - Navigation Component
 (Có thể nâng cấp lên Compose)
 ___________________________________________________________________________________________
+
 
