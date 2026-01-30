@@ -29,9 +29,11 @@ class MainViewModel : ViewModel() {
                     _uiState.update {
                         it.copy(isLoading = false, text = "hello ${user.displayName} voi id = ${user.id}")
                     }
+                    _uiEvent.tryEmit(MainUiEvent.Toast("Load successed!"))
                 }
                 is ApiResult.Error -> {
                     _uiState.update { it.copy(isLoading = false, text = result.message) }
+                    _uiEvent.tryEmit(MainUiEvent.Toast("Load failed!"))
                 }
             }
         }
