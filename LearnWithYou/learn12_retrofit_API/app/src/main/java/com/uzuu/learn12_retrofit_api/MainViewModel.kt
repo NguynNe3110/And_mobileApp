@@ -11,11 +11,16 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
+    //ApiClient.userApi là instance duy nhất của Object UserApi
+    // dù có gọi bao nhiêu lần ApiClient.userApi thì vẫn là 1 instance đó
+    // -> đây gọi là singleton
     private val repo = UserRepository(ApiClient.userApi)
 
+    //khai báo stateflow
     private val _uiState = MutableStateFlow(MainUiState())
     val uiState = _uiState.asStateFlow()
 
+    //sharedflow
     private val _uiEvent = MutableSharedFlow<MainUiEvent>(extraBufferCapacity = 1)
     val uiEvent = _uiEvent.asSharedFlow()
 

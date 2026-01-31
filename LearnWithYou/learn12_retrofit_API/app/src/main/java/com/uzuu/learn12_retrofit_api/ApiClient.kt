@@ -5,6 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 //Retrofit client (tối giản)
+//dùng object để đảm bảo chỉ 1 instance duy nhất
 object ApiClient {
     private const val BASE_URL = "https://jsonplaceholder.typicode.com/"
 
@@ -13,6 +14,9 @@ object ApiClient {
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+            //đọc interface UserApi -> từng fun trong đó
+            // và lưu thông tin lại (gồm func, endpoint, type return)
+            // -> retrofit tạo ra 1 object giả implement UserApi
             .create(UserApi::class.java)
     }
 }

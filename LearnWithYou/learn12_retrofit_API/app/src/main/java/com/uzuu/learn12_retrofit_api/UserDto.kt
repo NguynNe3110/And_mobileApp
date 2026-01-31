@@ -4,5 +4,6 @@ package com.uzuu.learn12_retrofit_api
 data class UserDto(
     val id: Int,
     val name: String,
-    val email: String
+    val email: String,
+    val website: String
 )

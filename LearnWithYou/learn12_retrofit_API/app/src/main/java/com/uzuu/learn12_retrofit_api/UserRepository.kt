@@ -8,7 +8,13 @@ class UserRepository(
 ) {
     suspend fun getUser(id: Int): ApiResult<User> {
         return try {
+            // k cần imple nhưng vẫn gọi được getUser thuộc ìnterface UserApi
+            //Retrofit tạo ra 1 object implement interface này LÚC APP ĐANG CHẠY
+            //(chứ không phải lúc compile)
+            // nó được gọi là runtime-generated object trong retrofit
             val dto = api.getUser(id)
+            // khi gọi đến api thì retrofit làm hết (tạo request, gửi, nhận, parse(Gson), return Dto)
+            //thực tế (tạo URL, gắn path {id} = 1, gửi HTTP bằng Okhttp, nhận JSON, parse bằng Gson, trả về UserDto)
             val user = dto.toDomain()
             ApiResult.Success(user)
         } catch (e: IOException){
